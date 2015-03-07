@@ -1,16 +1,14 @@
 package com.idoz.java8;
 
-import java.util.HashMap;
+import com.google.common.collect.Lists;
+import com.idoz.java8.presentation.Album;
+import com.idoz.java8.presentation.Track;
+
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import com.google.common.collect.Lists;
-import com.idoz.java8.presentation.Album;
-import com.idoz.java8.presentation.Track;
 
 /**
  * Created by izilberberg on 2/10/15 for the Java8 presentation
@@ -24,6 +22,7 @@ public class Main {
     public Integer apply(String string) {
       return string.length();
     }
+
   };
 
   //  Function using lambda expression - same thing
@@ -38,7 +37,7 @@ public class Main {
 
   // CONSUMER: accepts something, returns nothing.
 
-  Consumer<String> consumer = (s) -> System.out.println(s);
+  Consumer<String> printMe = (s) -> System.out.println(s);
 
   public static void main(String[] args) {
 
@@ -61,16 +60,16 @@ public class Main {
 
     List<Album> albums = Lists.newArrayList(album1, album2);
 
-    albums.stream().map(Album::getTracks).mapToInt(Track::getLength).sum();
+    int totalTime = albums.stream().map(Album::getTracks).mapToInt(Track::getLength).sum();
+    System.out.println("totalTime=" + totalTime);
+
 
     //// New operations on regular maps:
 
-    Map<String, String> englishToFrench = new HashMap<>();
-    englishToFrench.put("one", "un");
-    englishToFrench.put("two", "deux");
 
-    englishToFrench.forEach((id, str) -> System.out.println(str));
-    Stream.of(englishToFrench).map((key, value) -> value).forEach(consumer);
+    //// Stream.of() can be useful in testing
+    Stream<String> countryCodes = Stream.of("IL","UK", "US", "FR", "CA");
+    countryCodes.filter(s -> s.startsWith("U")).sorted().forEach(printMe);
 
   }
 
