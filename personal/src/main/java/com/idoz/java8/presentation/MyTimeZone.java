@@ -7,7 +7,7 @@ public class MyTimeZone {
   String code, name;
   Double offsetJan, offsetJul, offsetStandard;
 
-  public MyTimeZone(String ... params)  {
+  public MyTimeZone(String[] params)  {
     this.code = params[0];
     this.name = params[1];
     this.offsetJan = Double.parseDouble(params[2]);
@@ -53,5 +53,5 @@ public class MyTimeZone {
             ", offsetStandard=" + offsetStandard +
             '}';
   }
-}
+
 }

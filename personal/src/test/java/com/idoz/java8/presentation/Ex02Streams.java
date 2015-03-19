@@ -29,8 +29,12 @@ public class Ex02Streams {
   @Test
   public void bigTest() throws IOException {
     simplestStream();
+    filterExample();
+    mappingExample();
+    sortingExample();
+    sumExample();
+    collectExample();
     opTypes();
-    createStreamFromListAndCollectBackToList();
     peekExample();
     sortExample();
 
@@ -45,39 +49,83 @@ public class Ex02Streams {
   public void simplestStream() throws IOException {
 
     Stream<String> namesStream = Stream.of("Hello", "world");
-    namesStream.forEach(s-> System.out.println(s));
+    //namesStream.forEach(s-> System.out.println(s));
     // Can use method ref because Consumer signature same as println
 
     // this will fail if using same stream
-    namesStream.forEach(System.out::println);
+    //namesStream.forEach(System.out::println);
 
-    List<String> list = namesStream.collect(Collectors.toList());
-    list.forEach(System.out::println);
+//    List<String> list = namesStream.collect(Collectors.toList());
+//    list.forEach(System.out::println);
 
     // stream of ints - has special ops like average()
-    final IntStream numbers = IntStream.of(1, 2, 3, 4, 5, 9, 5, 4, 100, 1, 10);
+//    final IntStream numbers =
+//            IntStream.of(1, 2, 3, 4, 5, 9, 5, 4, 100, 1, 10);
 
     // stream from I/O using the new Files.lines()
     final Stream<String> lines =
-            Files.lines(new File(TIME_ZONES_TXT).toPath());
+          Files.lines(new File(TIME_ZONES_TXT).toPath());
 
   }
 
   @Test
-  public void opTypes() {
-    final IntStream numbers = IntStream.of(1, 2, 3, 4, 5, 9, 5, 4, 100, 1, 10);
-    final int sum = numbers
-            .sorted() // intermediate, eager, stateful
-            .distinct() // intermediate, eager, stateful
-            .skip(1) // intermediate, lazy, stateless, short-circuit
-            .limit(2) // intermediate, lazy, stateless, short-circuit
-            .sum(); // terminal, eager, stateful
+  public void filterExample() {
+    Stream<String> namesStream = Stream.of("One", "Two", "Three", "Four");
 
+    namesStream
+      .filter(s -> s.startsWith("T"))
+      .forEach(System.out::println);
+
+  }
+
+  @Test
+  public void mappingExample() {
+    Stream<String> namesStream = Stream.of("One", "Two", "Three", "Four");
+
+    namesStream
+      .map(s -> s.substring(1))
+      .forEach(System.out::println);
+
+
+  }
+
+  @Test
+  public void sortingExample()  {
+    Stream<String> namesStream = Stream.of("One", "Two", "Three", "Four");
+    namesStream
+            //.sorted() // natural order
+            // custom order
+      .sorted((s1, s2) -> (s1.substring(1).compareTo(s2.substring(1))))
+      .forEach(System.out::println);
+  }
+
+  @Test
+  public void sumExample()  {
+    final IntStream numbers =
+            IntStream.of(1, 2, 3, 4, 5, 9, 5, 4, 100, 1, 10);
+    int sum = numbers.sum();
     System.out.println("Sum: " + sum);
   }
 
   @Test
-  public void createStreamFromListAndCollectBackToList() {
+  public void matchExample()  {
+    Stream<String> namesStream = Stream.of("One", "Two", "Three", "Four");
+
+    //namesStream.forEach(System.out::println);
+
+    // note the "short-circuit" feature of anyMatch()
+    boolean found = namesStream
+            .peek(System.out::println)
+            .skip(1)
+            .sorted()
+            .anyMatch(s -> s.startsWith("Tw"));
+
+    //System.out.println(found);
+
+  }
+
+  @Test
+  public void collectExample() {
 
     final List<String> strings = Arrays.asList("A", "B", "E", "D", "C", "A");
 
@@ -92,6 +140,23 @@ public class Ex02Streams {
 
     System.out.println(modifiedStrings);
 
+  }
+
+  @Test
+  public void opTypes() {
+
+//    final IntStream num2 = IntStream.of(1,2,3);
+//    num2.forEach(System.out::println);
+//
+    final IntStream numbers = IntStream.of(1, 8, 3, 4, 5, 9, 5, 4, 100, 1, 10);
+    numbers
+            .peek(i -> System.out.println(i))
+            .sorted() // intermediate, eager, stateful
+            .distinct() // intermediate, eager, stateful
+            .skip(2) // intermediate, lazy, stateless, short-circuit
+            .limit(2) // intermediate, lazy, stateless, short-circuit
+            .sum(); // terminal, eager, stateful, actually runs all!
+    ;
   }
 
   @Test
@@ -152,9 +217,14 @@ public class Ex02Streams {
 
     System.out.println(namesStream.reduce("", (s1, s2) -> (s1 + " " + s2)));
 
+    // associative
+    // 1x2x3x4x5x6 = (1x2)x(3x4)x(5x6) = 2x12x30 = 720
     final int n = 15;
     long factorial = LongStream
             .rangeClosed(1, n) // rangeClosed() includes the last element; range() doesn't
+
+            .parallel() // parallel version of LongStream
+
             .reduce(1, (i1,i2)->(i1*i2));
 
     System.out.println(n + "! = " + factorial);
@@ -176,7 +246,7 @@ public class Ex02Streams {
     // It then concatenates all the resulting streams into one
     integerListStream
             //.flatMap((integerList) -> integerList.stream()) // variant 1: lambda expression
-            .flatMap(List::stream) // variant 2: static method reference
+            .flatMap(list->list.stream()) // variant 2: static method reference
             .forEach(System.out::println);
   }
 

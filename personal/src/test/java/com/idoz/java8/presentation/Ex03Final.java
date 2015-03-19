@@ -63,10 +63,10 @@ public class Ex03Final {
     // try it and use peek() to debug
     List<MyGeoCity> cities = linesList
             .stream()
-            .limit(1000)
+            //.peek(System.out::println)
+            //.limit(1000)
             .map(line -> line.split(","))
             .map(MyGeoCity::new)
-            //.peek(System.out::println)
             .collect(Collectors.toList());
 
     /////////////

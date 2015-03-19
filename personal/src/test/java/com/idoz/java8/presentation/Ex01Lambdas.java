@@ -15,6 +15,8 @@ import java.util.function.Supplier;
  */
 public class Ex01Lambdas {
 
+  // HELLO WORLD //
+
   @Ignore
   @Test
   public void bigTest() {
@@ -50,18 +52,24 @@ public class Ex01Lambdas {
     // Removed the "new Comparator()"
     // You can still extract to variable of course
 
-    Collections.sort(names, (String a, String b)->{return b.compareTo(a);});
+//    Collections.sort(
+//            names, (String a, String b)->{return b.compareTo(a);});
 
 
     // Lambdas - take 2 (remove the "return")
-    Collections.sort(names, (String a, String b) -> b.compareTo(a));
+    //Collections.sort(names, (String a, String b) -> b.compareTo(a));
+
 
     // Lambdas - take 3a (remove the types, they are inferred)
     // Called target typing
-    Collections.sort(names, (a, b) -> a.compareTo(b)); // note the warning!
 
-            // Lambdas - take 4 (method references)
+    //Collections.sort(names, (a, b) -> a.compareTo(b)); // note the warning!
+
+
+    // Lambdas - take 4 (method references)
+    //
     Collections.sort(names, String::compareTo);
+
 
     System.out.println(names);
   }
@@ -74,7 +82,7 @@ public class Ex01Lambdas {
   public void moreLambdas() {
 
     // The original
-    final Supplier<Double> randSupplierOrig = new Supplier<Double>() {
+    final Supplier<Double> randGeneratorOrig = new Supplier<Double>() {
       @Override
       public Double get() {
         return Math.random();
@@ -82,13 +90,13 @@ public class Ex01Lambdas {
     };
 
     // lambda with no params
-    final Supplier<Double> randSupplier = () -> Math.random();
+    final Supplier<Double> randGenerator = () -> Math.random();
 
     // this works because Math.random gets nothing and returns Double,
     // just like this Supplier
     final Supplier<Double> randSupplier2 = Math::random;
 
-    display(randSupplier);
+    display(randGenerator);
     display(() -> 100.0); // an inline lambda
 
     // lambda with no params and no return value

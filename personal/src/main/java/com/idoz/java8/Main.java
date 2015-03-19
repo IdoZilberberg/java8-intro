@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.idoz.java8.presentation.Album;
 import com.idoz.java8.presentation.Track;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -28,7 +29,7 @@ public class Main {
   //  Function using lambda expression - same thing
   Function<String, Integer> len2 = string -> string.length();
 
-  // Using concise method reference notation (double colons) when the function you describe is an existing legacy function
+  // Method reference notation (double colons) for calling an existing function
   Function<String, Integer> len3 = String::length;
 
   // SUPPLIER: accepts nothing, returns something
@@ -39,13 +40,13 @@ public class Main {
 
   Consumer<String> printMe = (s) -> System.out.println(s);
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
 
     new Main().run();
 
   }
 
-  public void run() {
+  public void run() throws IOException {
 
     Track track1a = new Track(5);
     Track track1b = new Track(3);
@@ -64,6 +65,13 @@ public class Main {
     System.out.println("totalTime=" + totalTime);
 
 
+//    Files.lines(new File("src/main/resources/timeZones.txt").toPath())
+//            .skip(1)
+//            .map(s -> s.split("\t"))
+//            .map(sarr->MyTimeZone::new)
+//            .filter(tz -> tz.getOffsetJan().equals(tz.getOffsetJul()))
+//            .forEach(System.out::println);
+
     //// New operations on regular maps:
 
 
@@ -71,6 +79,9 @@ public class Main {
     Stream<String> countryCodes = Stream.of("IL","UK", "US", "FR", "CA");
     countryCodes.filter(s -> s.startsWith("U")).sorted().forEach(printMe);
 
+
+
   }
+
 
 }

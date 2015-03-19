@@ -1,7 +1,6 @@
 package com.idoz.stuff;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -32,6 +31,10 @@ public class Main {
     DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
     String str = fmt.print(dt);
     System.out.println(str);
+
+    DateTime t1 = fmt.parseDateTime("2010-12-31T22:33:44.987+02:00");
+    System.out.println(t1.getYear() + " " + t1.getMonthOfYear());
+
   }
 
   private static void randomStuff() {
@@ -46,6 +49,8 @@ public class Main {
   }
 
   private static void timezones() {
+
+    DateTimeZone.getAvailableIDs();
 
     DateTime now = new DateTime();
     DateTimeZone tzNY = DateTimeZone.forID("America/New_York");
